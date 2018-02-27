@@ -1,0 +1,125 @@
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/font-awesome.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<style>
+.table tr td{height:30px;}
+.icon-large:hover{cursor:hand;}
+</style>
+<div class="container-fluid main">
+	<div class="main-top"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>植物管理</div>
+	<div class="main-content">
+			<div style="margin-bottom:20px;"><a href="{:url('plantAdd')}"><button type="button" class="btn btn-warning" >添加新植物</button></a></div>
+			<div id="list">
+
+			</div>
+		<div class="pagelist"><div id="demo3"></div></div>
+	</div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>
+<script src="__STATIC__/admin/layui/layui.js" charset="utf-8"></script>
+<script>
+    getPage(1);
+    function getPage(a) {
+        var index = layer.load(2,{
+            shade:[0.6,'#000']
+        })
+        $.ajax({
+            url:"{:url('plantList')}",
+            type:"post",
+            dataType:"json",
+            data:{
+                'page':a
+            },
+            success:function (data) {
+                layer.close(index);
+                setLayPage(data.number,a);
+                setDivData(data.data);
+            },
+            error:function (data) {
+                layer.close(index);
+                layer.msg('网络错误,请稍后重试');
+            }
+        });
+
+    }
+</script>
+<script>
+    function setLayPage(number,a){
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //自定义首页、尾页、上一页、下一页文本
+            laypage.render({
+                elem: 'demo3'
+                ,count: number
+                ,curr:a//显示第几页
+                ,limit:10
+                ,first: '首页'
+                ,last: '尾页'
+                ,prev: '<em>←</em>'
+                ,next: '<em>→</em>'
+                ,jump: function(obj,first){
+                    if(!first){
+                        getPage(obj.curr);
+                    }
+                }
+            });
+        });
+    }
+
+    function setDivData(data){
+        str = '';
+        str += '<table class="table table-striped"  style="font-size:14px;margin-top: 20px;"><th>id</th><th>植物名</th><th>类目名</th><th>植物编号</th><th>价格</th><th>周期时间</th><th>金币</th><th>周期</th><th>操作</th>';
+        for(i = 0; i < data.length; i++){
+            str += '<tr style="font-size:13px;" class="data"><td>'+data[i]['id']+'</td>';
+            str += '<td>'+data[i]['name']+'</td>';
+            str += '<td>'+data[i]['cate_name']+'</td>';
+            str += '<td>'+data[i]['plant_code']+'</td>';
+            str += '<td>'+data[i]['price']+'</td>';
+            str += '<td>'+data[i]['cycle']/3600+'小时</td>';
+            str += '<td>'+data[i]['income']+'</td>';
+            str += '<td>'+data[i]['count']+'</td>';
+            str += '<td><button type="button" class="btn btn-warning" onclick="updatePlant('+data[i]['id']+')">修改</button><button type="button" style="background: darkred" class="btn btn-warning" onclick="del('+data[i]['id']+',this)">删除</button></td></tr>';
+        }
+        str += '</table>';
+        $('#list').empty();
+        $('#list').append(str);
+    }
+</script>
+<script>
+    function updatePlant(id){
+        location.href = "{:url('updatePlant')}?id=" + id;
+	}
+	function del(id,is){
+        layer.confirm('确定要删除', {
+            btn: ['是，确认','否，再看看'] //按钮
+        }, function(){
+            var index = layer.load(2,{
+                shade:[0.6,"#000"]
+            });
+            $.ajax({
+                type: "POST",
+                url: "{:url('delPlant')}",
+                dataType: "json",
+                data: {"id":id},
+                success: function(json){
+                    layer.close(index)
+                    if(json.code==1){
+                        layer.msg('删除成功');
+                        $(is).parent().parent().remove();
+                    }else{
+                        layer.msg("处理失败，请重新尝试");
+                    }
+                },
+                error:function(){
+                    layer.close(index)
+                    layer.msg("发生异常！");
+                }
+            });
+        }, function(){
+
+        });
+	}
+</script>

@@ -1,0 +1,104 @@
+<link rel="stylesheet" href="__STATIC__/admin/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<style>
+    .jifen{
+        border: 0px;
+        border-radius: 4px;
+        padding:10px;
+        width: 250px;
+        height: 30px;
+    }
+</style>
+<div class="container-fluid main">
+    <div class="main-top"><span></span>设置参数</div>
+    <div class="main-content well" style="height: 700px;">
+        <h5 class="alert alert-success" style="padding:5px 10px;line-height:30px;">设置参数</h5>
+        <div class="form-horizontal" style="height: 400px">
+            <form action="{:url('setGameCs')}"  method="post" >
+
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">开垦土地金币：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="kaiken_gold" name="kaiken_gold" class="inputstyle"  value="{$config.kaiken_gold}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">下级开地上级得到金币：</label>
+                    <div class="col-sm-6">
+                        <input class="jifen" type="text" id="kaiken_p_gold" name="kaiken_p_gold" class="inputstyle"  value="{$config.kaiken_p_gold}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">最少提现金额：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="withdraw_gold" name="withdraw_gold" class="inputstyle"  value="{$config.withdraw_gold}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">每天最多提现几次：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="withdraw_number" name="withdraw_number" class="inputstyle"  value="{$config.withdraw_number}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">每天最多提现多少金币：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="withdraw_max_gold" name="withdraw_max_gold" class="inputstyle"  value="{$config.withdraw_max_gold}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">充值金币最低充值金币：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="recharge_gold" name="recharge_gold" class="inputstyle"  value="{$config.recharge_gold}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">一个加速豆时间：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="accelerator_time" name="accelerator_time" class="inputstyle"  value="{$config.accelerator_time}"  placeholder="" />秒
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">客服QQ：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="kefu_url" name="kefu_url" class="inputstyle"  value="{$config.kefu_url}"  placeholder="" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label for="inputEmail3" class="col-sm-2 control-label">本地域名：</label>
+                    <div class="col-sm-6">
+
+                        <input class="jifen" type="text" id="domain" name="domain" class="inputstyle"  value="{$config.domain}"  placeholder="http://www.baidu.com" />
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                </div>
+                <input type="hidden" name="id" value="{$config.id}"/>
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">修改</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script src="__STATIC__/admin/js/jquery.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>

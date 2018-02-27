@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>重置密码</title>
+    <link rel="stylesheet" href="__STATIC__/login/updatepass/css/update.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="container-con">
+    <div class="form-con">
+        <div class="input-con">
+            <!--手机号-->
+            <div class="from-item">
+                <img src="__STATIC__/login/updatepass/image/mobile-.png" alt="" class="from-label img-small">
+                <input type="text" class="from-input" name="phone" placeholder="请输入手机号" id="phone">
+            </div>
+            <!--获取手机验证码-->
+            <div class="yz-content">
+                <div class="from-item">
+                    <input type="text" id="telCode" class="from-input" name="phoneCode" placeholder="请输入手机验证码">
+                </div>
+                <div class="img-box yzBtn" >
+                    <img src="__STATIC__/login/updatepass/image/code-button.png" alt="" class="imgChange">
+                    <p class="yzText"></p>
+                    <!--预先加载了这张图片-->
+                    <img src="__STATIC__/login/updatepass/image/empty.png" alt="" style="display: none;">
+                </div>
+            </div>
+            <!--图片验证码-->
+             <div class="yz-content">
+            <div class="from-item">
+                <input type="text" id="imgCode" class="from-input" name="imgCode" placeholder="请输入验证码图片">
+            </div>
+            <div class="img-box">
+                <img src="" onclick="getImgCode()" id="imgCode1" onclick="" alt="">
+            </div>
+        </div>
+            <!--密码-->
+            <div class="from-item">
+                <img src="__STATIC__/login/updatepass/image/password.png" alt="" class="from-label img-small">
+                <input type="password" class="from-input" id="password1" name="pwd" placeholder="请输入密码">
+            </div>
+            <!--再次确认密码-->
+            <div class="from-item">
+                <img src="__STATIC__/login/updatepass/image/confirm-password.png" alt="" class="from-label">
+                <input type="password" class="from-input" id="password2" name="rePwd" placeholder="请确认密码">
+            </div>
+            <div class="sure-btn">
+                <img src="__STATIC__/login/updatepass/image/sure-btn.png" onclick="updatePass()" alt="">
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/login/layer/layer.js"></script>
+
+<script type="text/javascript">
+    var sec = 60
+    var yzText = document.getElementsByClassName('yzText')[0]
+    var yzBtn = document.getElementsByClassName('yzBtn')[0]
+    var img = document.getElementsByClassName('imgChange')[0]
+    var isDone = true
+    yzBtn.addEventListener('click',yzCode)
+    function yzCode(){
+        if(isDone){
+            var phone = document.getElementById('phone').value
+            if(phone && /^((1[0-9]{1})+\d{9})$/.test(phone)){
+                //异步发送短信
+                var index = layer.load(2,{
+                    shade:[0.6,"#000"]
+                });
+                $.ajax({
+                    type:"post",
+                    url:"{:url('login/Login/sendMsg')}",
+                    dataType:"json",
+                    data:{
+                        'tel':phone,
+                        'type':2,
+                    },
+                    success:function (data) {
+                        layer.close(index);
+                        if(data.code == 10000){
+                            isDone = false;
+                            layer.msg(data.msg);
+                            img.src = '__STATIC__/login/register/image/empty.png'
+                            for (var i = 0;i<=sec;i++){
+                                window.setTimeout(function () {
+                                    if(sec!==0){
+                                        sec--;
+                                        yzText.innerHTML = sec + "秒"
+                                    } else {
+                                        sec = 60;
+                                        yzText.innerHTML = '';
+                                        img.src = '__STATIC__/login/register/image/code-button.png'
+                                        isDone = true;
+                                    }
+                                },i*1000)
+                            }
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    },
+                    error:function (data) {
+                        layer.close(index);
+                        layer.msg('网络错误');
+                    }
+                });
+            } else {
+                alert('请输入正确的手机号!')
+            }
+        }
+    }
+</script>
+<script>
+    getImgCode();
+    function getImgCode(){
+        //异步请求图片验证码
+        $.ajax({
+            type:"post",
+            url:"{:url('login/Login/createImgCode')}",
+            dataType:"json",
+            data:{
+            },
+            success:function (data) {
+                if(data.code == 10000){
+                    $("#imgCode1").attr('src',data.msg);
+                }
+            },
+        });
+    }
+
+    function updatePass(){
+        var username = $("#phone").val();
+        if(username == ''){
+            layer.msg('请输入手机号');return;
+        }
+        var telCode = $("#telCode").val();
+        if(telCode == ''){
+            layer.msg('请输入手机验证码');return;
+        }
+        var imgCode = $("#imgCode").val();
+        if(imgCode == ''){
+            layer.msg('请输入图片验证码');return;
+        }
+        var password1 = $("#password1").val();
+        if(password1 == ''){
+            layer.msg('请输入密码');return;
+        }
+        var password2 = $("#password2").val();
+        if(password2 == ''){
+            layer.msg('请输入密码');return;
+        }
+
+        if(password1 != password2){
+            layer.msg('两次输入的密码不一致');return;
+        }
+        if(!/^((1[0-9]{1})+\d{9})$/.test(username)){
+            layer.msg('请输入正确的手机号码');return;
+        }
+        if(!/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/.test(password1)){
+            layer.msg('密码为数字和字母结合');return;
+        }
+
+        var index = layer.load(2,{
+            shade:[0.6,"#000"]
+        });
+        $.ajax({
+            type:"post",
+            url:"{:url('login/Login/updatePass')}",
+            dataType:"json",
+            data:{
+                "username":username,
+                "telCode":telCode,
+                "imgCode":imgCode,
+                "password1":password1,
+                "password2":password2,
+            },
+            success:function (data) {
+                layer.close(index);
+                if(data.code == 10000){
+                    layer.msg(data.msg);
+                    setTimeout(function () {
+                        location.href = "{:url('index/Index/index')}";
+                    },1200);
+                }else{
+                    layer.msg(data.msg);
+                }
+            },
+            error:function (data) {
+                layer.close(index);
+                layer.msg('网络错误');
+            }
+        });
+
+    }
+
+</script>
+</html>

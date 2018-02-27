@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/font-awesome.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<style>
+	.table tr td img{height:40px;cursor:hand;}
+</style>
+<div class="container-fluid main">
+	<div class="main-top"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>植物管理--添加植物</div>
+	<div class="main-content">
+	  <ul class="nav nav-tabs" role="tablist">
+		<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">植物参数</a></li>
+	  </ul>
+	  <form class="form-horizontal" action="plantAdd" method="post" onsubmit="return check();" enctype="multipart/form-data" >
+	  <div class="tab-content well" style="margin-top:30px;border:1px solid #dddddd;padding:10px 2%;">
+		<div role="tabpanel" class="tab-pane active" id="home">
+			
+			 <div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 col-lg-1 control-label">植物名称</label>
+				<div class="col-sm-6 col-lg-4">
+					<!--<input type="text" class="form-control" id="name" name="name" value="" placeholder="">-->
+					<select class="form-control" name="name" id="name">
+						<option value="奶牛">奶牛</option>
+						<option value="胡萝卜">胡萝卜</option>
+						<option value="黄瓜">黄瓜</option>
+						<option value="小猪">小猪</option>
+						<option value="草莓">草莓</option>
+						<option value="玉米">玉米</option>
+						<option value="菠萝">菠萝</option>
+						<option value="白菜">白菜</option>
+						<option value="蓝莓">蓝莓</option>
+						<option value="柠檬">柠檬</option>
+						<option value="橙子">橙子</option>
+						<option value="苹果">苹果</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 col-lg-1 control-label">所属类目</label>
+				<div class="col-sm-3  col-lg-2">
+					<select class="form-control" name="cate_id" id="cate_id">
+						{volist name='cateInfo' id="vv"}
+							<option value="{$vv.id}">{$vv.name}</option>
+						{/volist}
+					</select>
+				</div>
+				<div class="col-sm-3 col-lg-2">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="inputEmail3" class="col-sm-2 col-lg-1 control-label">植物编号</label>
+				<div class="col-sm-3  col-lg-2">
+					<input type="number" class="form-control" id="plant_code" name="plant_code" value="" placeholder=""><div onclick="lookPlantCode()" class="btn btn-success">查看编号</div>
+				</div>
+				<div class="col-sm-3 col-lg-2">
+				</div>
+			</div>
+			<div style="clear:both"></div>
+			<div style="margin-top:30px"><button type="submit" class="btn btn-success">保存植物信息</button></div>
+		</div>
+	  </div>
+	</form>
+	</div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>
+<script>
+function check(){
+	if($('#name').val()==""){layer.msg("植物名称不能为空");return false;}
+	if($('#cate_id').val()==""){layer.msg("植物类目不能为空");return false;}
+	if($('#plant_code').val()==""){layer.msg("植物编号不能为空");return false;}
+}
+function lookPlantCode(){
+    str = '';
+    str += '<table style="text-align: center" class="table"  border="1" cellspacing="0" width="500px"><th>植物名</th><th>编号</th>';
+	str += '<tr><td>奶牛</td><td>110</td></tr>';
+	str += '<tr><td>胡萝卜</td><td>120</td></tr>';
+	str += '<tr><td>黄瓜</td><td>130</td></tr>';
+	str += '<tr><td>小猪</td><td>140</td></tr>';
+	str += '<tr><td>草莓</td><td>150</td></tr>';
+	str += '<tr><td>玉米</td><td>160</td></tr>';
+	str += '<tr><td>菠萝</td><td>170</td></tr>';
+	str += '<tr><td>白菜</td><td>180</td></tr>';
+	str += '<tr><td>蓝莓</td><td>190</td></tr>';
+	str += '<tr><td>柠檬</td><td>200</td></tr>';
+	str += '<tr><td>橙子</td><td>210</td></tr>';
+	str += '<tr><td>苹果</td><td>220</td></tr>';
+    str += '</table>';
+
+    //自定页
+	layer.open({
+		type: 1,
+		skin: 'layui-layer-demo', //样式类名
+		closeBtn: 0, //不显示关闭按钮
+		anim: 3,
+		shadeClose: true, //开启遮罩关闭
+		content: str
+	});
+}
+</script>

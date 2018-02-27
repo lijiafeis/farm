@@ -1,0 +1,189 @@
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/layui/css/layui.css"  media="all">
+<style>
+	table button{
+		width: 50px;
+		height: 34px;
+		margin-left: 5px;
+	}
+</style>
+<div class="container-fluid main">
+	<div class="main-top"><span  aria-hidden="true"></span>流水记录列表</div>
+		<div class="main-content">
+			<div>
+				<div>
+					<div class="well">
+						<div class="btn-group" style="">
+
+						</div><br/>
+						<div class="btn-group" style="margin-top:20px;">
+							<button type="button" class="btn btn-default">user_id</button>
+							<div class="btn-group">
+								<input type="text" id="user_id" class="form-control">
+							</div>
+							<button type="button" class="btn btn-default">类别</button>
+							<div class="btn-group">
+								<select id="state" class="form-control">
+									<option value="0">全部</option>
+									<option value="1">支出</option>
+									<option value="2">收入</option>
+								</select>
+							</div>
+							<button type="button" class="btn btn-default">类型</button>
+							<div class="btn-group">
+								<select id="type" class="form-control">
+									<option value="0">全部</option>
+									<option value="1">购买土地支出</option>
+									<option value="2">购买植物支出</option>
+									<option value="20">下级购买土地收入</option>
+									<option value="21">自己收获植物收入金币</option>
+									<option value="22">充值金币</option>
+									<option value="23">后台充值</option>
+									<option value="24">下级种植得金币</option>
+								</select>
+							</div>
+							<button type="button" class="btn btn-warning" onclick="getPage(1)">查询</button>
+						</div>
+					</div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">列表</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<div id="list">
+
+						</div>
+						<div class="pagelist"><div id="demo3"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>
+<script src="__STATIC__/admin/layui/layui.js" charset="utf-8"></script>
+<script>
+	getPage(1);
+	function getPage(a) {
+        var user_id = $("#user_id").val();
+        var state = $("#state").val();
+        var type = $("#type").val();
+        var index = layer.load(2,{
+            shade:[0.6,'#000']
+		})
+        $.ajax({
+            url:"{:url('financeLog')}",
+            type:"post",
+            dataType:"json",
+            data:{
+                'page':a,
+                'user_id':user_id,
+				'state' : state,
+				'type' : type
+            },
+            success:function (data) {
+                layer.close(index);
+                setLayPage(data.number,a);
+                setDivData(data.data);
+            },
+            error:function (data) {
+                layer.close(index);
+                layer.msg('网络错误,请稍后重试');
+            }
+        });
+
+    }
+</script>
+<script>
+	function setLayPage(number,a){
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //自定义首页、尾页、上一页、下一页文本
+            laypage.render({
+                elem: 'demo3'
+                ,count: number
+                ,curr:a//显示第几页
+                ,limit:10
+                ,first: '首页'
+                ,last: '尾页'
+                ,prev: '<em>←</em>'
+                ,next: '<em>→</em>'
+                ,jump: function(obj,first){
+                    if(!first){
+                        getPage(obj.curr);
+                    }
+                }
+            });
+        });
+	}
+
+	function setDivData(data){
+//        a.user_id,a.gold,a.state,a.type,a.create_time,b.nickname,c.nickname as xj_name
+	    str = '';
+	    str += '<table class="table table-striped"  style="font-size:14px;margin-top: 20px;"><th>user_id</th><th>姓名</th><th>金币</th><th>类别</th><th>分类</th><th>时间</th>';
+		for(i = 0; i < data.length; i++){
+            data[i]['create_time'] = new Date(parseInt(data[i]['create_time']) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+
+            if(data[i]['state'] == 1){
+                data[i]['state'] = '账户支出';
+			}else if(data[i]['state'] == 2){
+                data[i]['state'] = '账户收入'
+			}
+//        <option value="1">购买土地支出</option>
+//                <option value="2">购买植物支出</option>
+//                <option value="20">下级购买土地收入</option>
+//                <option value="21">自己收获植物收入金币</option>
+//                <option value="22">充值金币</option>
+//                <option value="23">后台充值</option>
+			switch (data[i]['type']){
+				case 1:
+				    data[i]['type'] = '购买土地支出';
+				    break;
+                case 2:
+                    data[i]['type'] = '购买植物支出';
+                    break;
+                case 3:
+                    data[i]['type'] = '提现支出';
+                    break;
+                case 20:
+                    data[i]['type'] = '下级'+data[i]['xj_name']+'购买土地收入';
+                    break;
+                case 21:
+                    data[i]['type'] = '自己收获植物收入金币';
+                    break;
+                case 22:
+                    data[i]['type'] = '充值金币';
+                    break;
+                case 23:
+                    data[i]['type'] = '后台充值';
+                    break;
+                case 24:
+                    data[i]['type'] = '下级'+data[i]['param']+'种植植物收入';
+                    break;
+			}
+
+
+
+        	str += '<tr style="font-size:13px;" class="data"><td>'+data[i]['user_id']+'</td>';
+			str += '<td>'+data[i]['nickname']+'</td>';
+			str += '<td>'+data[i]['gold']+'</td>';
+			str += '<td>'+data[i]['state']+'</td>';
+			str += '<td>'+data[i]['type']+'</td>';
+			str += '<td>'+data[i]['create_time']+'</td>';
+
+		}
+		str += '</table>';
+		$('#list').empty();
+		$('#list').append(str);
+	}
+</script>
+<script>
+
+</script>

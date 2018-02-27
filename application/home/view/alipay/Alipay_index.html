@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+ <meta content="telephone=no" name="format-detection">
+<title>支付宝付款</title>
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/css/loader.css">
+<script src="__PUBLIC__/js/loader.js"></script>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/weui.new.css">
+<link rel="stylesheet" href="__PUBLIC__/css/jquery.fullPage.css">
+<script src="__PUBLIC__/js/jquery.fullPage.min.js"></script>
+<script src="__PUBLIC__/js/xigua.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/ali_font/iconfont.css">
+<style>
+.btn{width:80%;border-style:none;line-height:35px;background: #f3b30b;left:0%;text-align: center;font-size: 16px;color:#fff;border-radius: 0px;margin:0 auto;margin-top: 10%;}
+span{display:inline-block;background: #f3b30b;color: #fff;width:20px;height:20px;line-height: 20px; border-radius: 50%;text-align: center;}
+</style>
+<script>
+$(function(){
+    $('#fullpage').fullpage({
+        'css3': true,
+        'paddingTop':'-444',
+    })
+ })
+</script>
+<script type="text/javascript">
+    // 对浏览器的UserAgent进行正则匹配，不含有微信独有标识的则为其他浏览器
+    var useragent = navigator.userAgent.toLowerCase();
+   if(useragent.match(/MicroMessenger/i) !="micromessenger"){
+       	location.href="{$html_text}"
+   }
+</script>
+</head>
+<body style="text-align: center;padding-top: 10%;color: #555;">
+	<img src="__PUBLIC__/images/alipay_top.png" width="60%" alt="">
+	<div style="margin:20px 0 10px;">您需要进行一下操作以便使用支付宝完成支付</div>
+	<div style="text-align: left;margin-left: 20%;border-left:2px solid #f3b30b;color: #f3b30b">
+	<div style="margin:20px 0;"><span>1</span>点击屏幕右上角菜单按钮</div>
+	<div style="margin:20px 0;"><span>2</span>选择 在浏览器打开 </div>
+	<div style="margin:20px 0;"><span>3</span>完成支付，返回</div>
+	</div>
+	<a><button class="btn">支付已完成</button></a>
+	
+</body>
+<php>
+$weixin = A("Wxapi/Weixin");
+$signPackage=$weixin->getSignPackage();
+</php>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+</script>
+
+</html>

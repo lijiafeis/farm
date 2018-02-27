@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>农场</title>
+</head>
+<body>
+<button>进入</button>
+</body>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script>
+    location.href = {$url}
+</script>
+<script type="text/javascript">
+    // 对浏览器的UserAgent进行正则匹配，不含有微信独有标识的则为其他浏览器
+    var useragent = navigator.userAgent.toLowerCase();
+    if(useragent.match(/MicroMessenger/i) !="micromessenger"){
+        location.href="{$html_text}"
+    }
+</script>
+</html>

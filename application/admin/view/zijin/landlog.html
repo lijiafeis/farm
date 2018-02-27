@@ -1,0 +1,135 @@
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/layui/css/layui.css"  media="all">
+<style>
+	table button{
+		width: 50px;
+		height: 34px;
+		margin-left: 5px;
+	}
+</style>
+<div class="container-fluid main">
+	<div class="main-top"><span  aria-hidden="true"></span>种植记录列表</div>
+		<div class="main-content">
+			<div>
+				<div>
+					<div class="well">
+						<div class="btn-group" style="">
+
+						</div><br/>
+						<div class="btn-group" style="margin-top:20px;">
+							<button type="button" class="btn btn-default">user_id</button>
+							<div class="btn-group">
+								<input type="text" id="user_id" class="form-control">
+							</div>
+							<!--<button type="button" class="btn btn-default">手机号</button>-->
+							<!--<div class="btn-group">-->
+								<!--<input type="text" id="tel" class="form-control">-->
+							<!--</div>-->
+							<!--<button type="button" class="btn btn-default">昵称</button>-->
+							<!--<div class="btn-group">-->
+								<!--<input type="text" id="name" class="form-control" placeholder="">-->
+							<!--</div>-->
+							<button type="button" class="btn btn-warning" onclick="getPage(1)">查询</button>
+						</div>
+					</div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">列表</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<div id="list">
+
+						</div>
+						<div class="pagelist"><div id="demo3"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>
+<script src="__STATIC__/admin/layui/layui.js" charset="utf-8"></script>
+<script>
+	getPage(1);
+	function getPage(a) {
+        var user_id = $("#user_id").val();
+        var tel = $("#tel").val();
+        var nickname = $("#name").val();
+        var index = layer.load(2,{
+            shade:[0.6,'#000']
+		})
+        $.ajax({
+            url:"{:url('landLog')}",
+            type:"post",
+            dataType:"json",
+            data:{
+                'page':a,
+                'user_id':user_id,
+            },
+            success:function (data) {
+                layer.close(index);
+                setLayPage(data.number,a);
+                setDivData(data.data);
+            },
+            error:function (data) {
+                layer.close(index);
+                layer.msg('网络错误,请稍后重试');
+            }
+        });
+
+    }
+</script>
+<script>
+	function setLayPage(number,a){
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //自定义首页、尾页、上一页、下一页文本
+            laypage.render({
+                elem: 'demo3'
+                ,count: number
+                ,curr:a//显示第几页
+                ,limit:10
+                ,first: '首页'
+                ,last: '尾页'
+                ,prev: '<em>←</em>'
+                ,next: '<em>→</em>'
+                ,jump: function(obj,first){
+                    if(!first){
+                        getPage(obj.curr);
+                    }
+                }
+            });
+        });
+	}
+
+	function setDivData(data){
+//        a.create_time,c.name as plant_name
+//        a.user_id,d.nickname,a.name as plant_name,a.price,a.cycle,a.income,a.number,a.count
+	    str = '';
+	    str += '<table class="table table-striped"  style="font-size:14px;margin-top: 20px;"><th>user_id</th><th>姓名</th><th>植物名</th><th>价格</th><th>周期</th><th>金币</th><th>总周期</th><th>已收货</th>';
+		for(i = 0; i < data.length; i++){
+        	str += '<tr style="font-size:13px;" class="data"><td>'+data[i]['user_id']+'</td>';
+			str += '<td>'+data[i]['nickname']+'</td>';
+			str += '<td>'+data[i]['plant_name']+'</td>';
+			str += '<td>'+data[i]['price']+'</td>';
+			str += '<td>'+data[i]['cycle']/3600+'</td>';
+			str += '<td>'+data[i]['income']+'</td>';
+			str += '<td>'+data[i]['count']+'次</td>';
+			str += '<td>'+data[i]['number']+'次</td>';
+
+		}
+		str += '</table>';
+		$('#list').empty();
+		$('#list').append(str);
+	}
+</script>
+<script>
+
+</script>

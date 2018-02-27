@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/bootstrap.min.css">
+<link rel="stylesheet" href="__STATIC__/admin/css/base.css">
+<link rel="stylesheet" href="__STATIC__/admin/layui/css/layui.css"  media="all">
+<style>
+	table button{
+		width: 50px;
+		height: 34px;
+		margin-left: 5px;
+	}
+</style>
+<div class="container-fluid main">
+	<div class="main-top"><span  aria-hidden="true"></span>加速器记录列表</div>
+		<div class="main-content">
+			<div>
+				<div>
+					<div class="well">
+						<div class="btn-group" style="">
+
+						</div><br/>
+						<div class="btn-group" style="margin-top:20px;">
+							<button type="button" class="btn btn-default">user_id</button>
+							<div class="btn-group">
+								<input type="text" id="user_id" class="form-control">
+							</div>
+							<button type="button" class="btn btn-default">类别</button>
+							<div class="btn-group">
+								<select id="type" class="form-control">
+									<option value="0">全部</option>
+									<option value="1">获得</option>
+									<option value="2">使用</option>
+								</select>
+							</div>
+							<button type="button" class="btn btn-warning" onclick="getPage(1)">查询</button>
+						</div>
+					</div>
+
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">列表</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<div id="list">
+
+						</div>
+						<div class="pagelist"><div id="demo3"></div></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="__STATIC__/admin/js/bootstrap.min.js"></script>
+<script src="__STATIC__/admin/layer/layer.js"></script>
+<script src="__STATIC__/admin/layui/layui.js" charset="utf-8"></script>
+<script>
+	getPage(1);
+	function getPage(a) {
+        var user_id = $("#user_id").val();
+        var type = $("#type").val();
+        var index = layer.load(2,{
+            shade:[0.6,'#000']
+		})
+        $.ajax({
+            url:"{:url('acceleratorLog')}",
+            type:"post",
+            dataType:"json",
+            data:{
+                'page':a,
+                'user_id':user_id,
+				'type':type
+            },
+            success:function (data) {
+                layer.close(index);
+                setLayPage(data.number,a);
+                setDivData(data.data);
+            },
+            error:function (data) {
+                layer.close(index);
+                layer.msg('网络错误,请稍后重试');
+            }
+        });
+
+    }
+</script>
+<script>
+	function setLayPage(number,a){
+        layui.use(['laypage', 'layer'], function(){
+            var laypage = layui.laypage
+                ,layer = layui.layer;
+            //自定义首页、尾页、上一页、下一页文本
+            laypage.render({
+                elem: 'demo3'
+                ,count: number
+                ,curr:a//显示第几页
+                ,limit:10
+                ,first: '首页'
+                ,last: '尾页'
+                ,prev: '<em>←</em>'
+                ,next: '<em>→</em>'
+                ,jump: function(obj,first){
+                    if(!first){
+                        getPage(obj.curr);
+                    }
+                }
+            });
+        });
+	}
+
+	function setDivData(data){
+//        a.create_time,c.name as plant_name
+	    str = '';
+	    str += '<table class="table table-striped"  style="font-size:14px;margin-top: 20px;"><th>user_id</th><th>姓名</th><th>数量</th><th>种植植物</th><th>下级姓名</th><th>类型</th><th>时间</th>';
+		for(i = 0; i < data.length; i++){
+		    if(data[i]['type'] == 0){
+		        data[i]['type'] = '获得'
+			}else if(data[i]['type'] == 1){
+                data[i]['xj_name'] = '无下级';
+                data[i]['type'] = '使用'
+			}
+		    data[i]['create_time'] = new Date(parseInt(data[i]['create_time']) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
+        	str += '<tr style="font-size:13px;" class="data"><td>'+data[i]['user_id']+'</td>';
+			str += '<td>'+data[i]['nickname']+'</td>';
+			str += '<td>'+data[i]['number']+'</td>';
+			str += '<td>'+data[i]['plant_name']+'</td>';
+			str += '<td>'+data[i]['xj_name']+'</td>';
+			str += '<td>'+data[i]['type']+'</td>';
+			str += '<td>'+data[i]['create_time']+'</td>';
+		}
+		str += '</table>';
+		$('#list').empty();
+		$('#list').append(str);
+	}
+</script>
+<script>
+
+</script>

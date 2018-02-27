@@ -1,0 +1,52 @@
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:77:"D:\phpStudy\WWW\farm\public/../application/index\view\index\jumpregister.html";i:1516173281;}*/ ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>Title</title>
+    <style>
+        blockquote, body, button, dd, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, hr, input, legend, li, ol, p, pre, select, td, textarea, th, ul { margin: 0px; padding: 0px; }
+        body { background: rgb(250, 250, 250); font-style: normal; font-variant: normal; font-weight: normal; font-stretch: normal; font-size: 14px; line-height: 1.5; font-family: "Microsoft YaHei", Helvetica, sans-serif; color: gray; text-size-adjust: 100% !important; }
+        img { border: none; }
+
+        a { color: rgb(26, 118, 204); text-decoration: none; }
+
+        a, img { -webkit-user-select: none; }
+        body, html { overflow-x: hidden; box-sizing: border-box; -webkit-user-select: none;font-family:  "Helvetica Neue","Hiragino Sans GB","Microsoft YaHei","\9ED1\4F53",Arial,sans-serif; }
+        .background{
+            width: 100%;
+            height: 100vh;
+            background-image: url("__STATIC__/home/image/backg1.png");
+            background-repeat: no-repeat;
+            -webkit-background-size: 100%;
+            background-size: 100%;
+        }
+        .container{
+            width: 100%;height: 100vh;background-color: rgba(0,0,0,.8);position: fixed;top: 0;left: 0;
+        }
+        .container .img-box{display: inline-block;margin-top: 2vh;text-align: right;width: 100%;}
+        .container .img-box img{width: 50%;display: inline-block;margin-right: 8vw;}
+        .container .des{text-align: center;color: #fff;font-size: 0.6rem;}
+        .container .des p{letter-spacing: 3px;margin-top: 10px}
+    </style>
+</head>
+<body>
+<div class="background">
+    <div class="container">
+        <div class="img-box">
+            <img src="__STATIC__/home/image/arrow.png" alt="">
+        </div>
+        <div class="des">
+            <p>请点击右上角</p>
+            <p>在手机自带浏览器中打开</p>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    var ele = document.getElementsByTagName('html')[0]
+    var size = document.body.clientWidth / 255 * 20
+    ele.style.fontSize = size + 'px'
+</script>
+</html>

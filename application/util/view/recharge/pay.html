@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>金币充值</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__/util/css/pay-common.css"/>
+<link rel="stylesheet" type="text/css" href="__STATIC__/util/css/wx-pay.css"/>
+</head>
+<body>
+<div class="app_container chongzhi">	
+	<div id="top">金币充值</div>
+	<div id="chongzhi">
+		<div>充值金币{$gold}个</div>
+		<div>应付金额 <em> {$gold} </em> 元</div>
+	</div>
+	<div id="text" style="">选择支付方式</div>
+	<!-- <a class="weui-panel__ft" onclick="pay(1,{$user_id},{$gold})">
+		<div class="img-icon"><img src="__STATIC__/util/img/pay-icons/icon-ali.png"/></div>
+		<div class="weui-cell weui-cell_access  weui-cell_link">
+			<div class="weui-cell__bd">支付宝支付</div> 				    				    
+			<span class="weui-cell__ft"></span>
+		</div>    
+	</a> -->
+	<a class="weui-panel__ft" onclick="pay(3,{$user_id},{$gold})">
+		<div class="img-icon"><img src="__STATIC__/util/img/pay-icons/icon-wx.png"/></div>
+		<div class="weui-cell weui-cell_access  weui-cell_link">
+			<div class="weui-cell__bd">微信支付</div>
+			<span class="weui-cell__ft"></span>
+		</div>
+	</a>
+	<a class="weui-panel__ft" onclick="pay(2,{$user_id},{$gold})">
+		<div class="img-icon"><img src="__STATIC__/util/img/pay-icons/icon-wx.png"/></div>
+		<div class="weui-cell weui-cell_access  weui-cell_link" style="border-bottom: 0">
+			<div class="weui-cell__bd">微信扫码支付</div>
+			<span class="weui-cell__ft"></span>
+		</div>    
+	</a>
+</div>
+</body>
+<script src="__STATIC__/util/js/font.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    /**
+	 *
+     * @param type 1 支付宝 2 扫码支付 3 h5支付
+     * @param user_id
+     * @param gold
+     */
+	function pay(type,user_id,gold){
+	  alert('由于支付通道被恶意举报导致平台无法收款打款，公司正在申请新的支付通道，预计明天中午12点前全部提现到位，请大家耐心等待')
+	}
+</script>
+</html>
